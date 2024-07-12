@@ -1,7 +1,7 @@
 "use client";
 import { builder, Builder } from "@builder.io/react";
-import Button from "./components/Button";
 import Counter from "./components/Counter/Counter";
+import Button from "./components/Button";
 
 builder.init(process.env.NEXT_PUBLIC_BUILDER_API_KEY!);
 
@@ -25,6 +25,7 @@ Builder.registerComponent(Button, {
     {
       name: "text",
       type: "string",
+      friendlyName: "apple",
       required: true,
     },
   ],
