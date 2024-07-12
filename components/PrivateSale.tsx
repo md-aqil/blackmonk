@@ -3,34 +3,22 @@
  */
 'use client'
 import { BUSD_ABI, BUSD_ADDRESS, getPrivateSaleABI, getPrivateSaleToken, REFERRAL_ADDRESS } from "@/utils/abis";
-import detectEthereumProvider from "@metamask/detect-provider";
-import React, { useEffect, useState } from "react";
-import Web3 from "web3";
+import React, { useState } from "react";
 import {toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Web3 from "web3";
 
-const PrivateSale: React.FC = () => {
-const [provider,setProvider] = useState<any>(null)
-const [web3,setWeb3] = useState<Web3|null>(null)
-const [accounts,setAccounts] = useState([])
+const PrivateSale = ({web3,accounts}:any) => {
 const [amount,setAmount] = useState('')
 
-async function connect(){
-  const ethereumProvider:any = await detectEthereumProvider();
-  if(!ethereumProvider) return toast.error('Please install MetaMask!')
-  const web3Instance = new Web3(ethereumProvider);
-  const accounts = await ethereumProvider.request({ method: 'eth_requestAccounts' });
-  setProvider(ethereumProvider);
-  setAccounts(accounts);
-  setWeb3(web3Instance);
-}
+
 
 async function enableBusd(){
   if (amount === '') return toast.error('Please enter a valid amount');
   if (+amount > 6250) return toast.error('Please enter amount less than 6250');
   if (accounts.length < 1) return  toast.error('Please connect to your wallet');
   try {
-    const busdContract = new web3!.eth.Contract(BUSD_ABI, BUSD_ADDRESS); // Define BUSD_ABI and BUSD_ADDRESS appropriately
+    const busdContract = new web3!.eth.Contract(BUSD_ABI, BUSD_ADDRESS); 
     const res = await busdContract.methods.approve(
       getPrivateSaleToken(),
       Web3.utils.toWei(+amount, 'ether')
@@ -48,8 +36,8 @@ async function swap(){
       REFERRAL_ADDRESS,
       Web3.utils.toWei(amount, 'ether')
     ).send({ from: accounts[0] })
-    .on('transactionHash', function (hash) {
-    
+    .on('transactionHash', function (hash:any) {
+      console.log(hash)
       // Handle transaction hash
     });
     toast.success('Transaction Successfull')
@@ -59,9 +47,6 @@ async function swap(){
   }
 }
 
-  useEffect(() => {
-    connect()
-  }, []);
 
   return (
     <section className="w-full max-w-[1210px] max-md:max-w-full">
@@ -117,10 +102,10 @@ async function swap(){
             <div className="justify-center px-12 py-3.5 mt-6 text-xl leading-6 text-center text-lime-300 rounded border border-dashed border-lime-300 border-opacity-40 max-md:px-5 max-md:max-w-full">
               You get: <span className="text-lime-300">15533.333</span> Monk
             </div>
-            <p className="mt-3 text-xs leading-4 text-stone-300 max-md:max-w-full">
+            {!accounts.length&&<p className="mt-3 text-xs leading-4 text-stone-300 max-md:max-w-full">
               *Web3 wallet not connected. Open this site in Trust <br /> wallet
               or Metamask dApp browser.
-            </p>
+            </p>}
           </form>
         </div>
         <div className="flex flex-col ml-5 w-[58%] max-md:ml-0 max-md:w-full">

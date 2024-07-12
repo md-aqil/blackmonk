@@ -6,9 +6,12 @@ import Button from "./Button";
 
 interface HeaderProps {
   logo: string;
+  onConnect: () => void;
+  accounts: string[];
 }
 
-const Header: React.FC<HeaderProps> = ({ logo }) => {
+const Header: React.FC<HeaderProps> = ({ logo, onConnect, accounts }) => {
+  const account = accounts.length ? accounts[0].slice(0,6)+'....'+accounts[0].slice(-6) : "Launch App"
   return (
     <header className="flex gap-5 justify-between items-center px-5 w-full max-w-[1284px] max-md:flex-wrap max-md:max-w-full">
       <img
@@ -24,8 +27,9 @@ const Header: React.FC<HeaderProps> = ({ logo }) => {
         <a href="#team">Team</a>
       </nav>
       <Button
-        text="Launch App"
-        icon="https://cdn.builder.io/api/v1/image/assets/TEMP/574eeb0fb2fda94c9fc850ebbb3d00782e68d4156aac39e2f4ed286a71dceeae?apiKey=b4d1b9e87b084579b1e2475047caf617&"
+        onClick={onConnect}
+        text={account}
+        icon={!accounts.length?"https://cdn.builder.io/api/v1/image/assets/TEMP/574eeb0fb2fda94c9fc850ebbb3d00782e68d4156aac39e2f4ed286a71dceeae?apiKey=b4d1b9e87b084579b1e2475047caf617&":undefined}
       />
     </header>
   );

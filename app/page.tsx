@@ -1,15 +1,38 @@
-
-import React from "react";
+'use client'
+import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import Hero from "../components/Hero";
 import Features from "../components/Features";
 import InfoSection from "../components/InfoSection";
 import PrivateSale from "../components/PrivateSale";
+import Web3 from "web3";
+import detectEthereumProvider from "@metamask/detect-provider";
+import { toast } from "react-toastify";
 
 const HomePage: React.FC = () => {
+  const [provider, setProvider] = useState<any>(null);
+  const [web3, setWeb3] = useState<Web3 | null>(null);
+  const [accounts, setAccounts] = useState([]);
+
+  async function initWeb3(){
+    const ethereumProvider: any = await detectEthereumProvider();
+    if (!ethereumProvider) return toast.error("Please install MetaMask!");
+    const web3Instance = new Web3(ethereumProvider);
+    setProvider(ethereumProvider);
+    setWeb3(web3Instance);
+  }
+
+  async function connect(){
+    const accounts = await provider.request({ method: 'eth_requestAccounts' });
+    setAccounts(accounts);
+  }
+
+  useEffect(() => {
+    initWeb3()
+  }, []);
   return (
-    <Layout>
-      <Hero />
+    <Layout accounts={accounts} onConnect={connect}>
+      <Hero  />
       <Features />
       <div className="flex flex-col items-center px-5 mt-28 w-full max-w-[1285px] max-md:mt-10 max-md:max-w-full">
         <InfoSection
@@ -27,7 +50,7 @@ const HomePage: React.FC = () => {
           imageAlt="BlackMonk as Business DAO illustration"
           reverse={true}
         />
-        <PrivateSale />
+        <PrivateSale accounts={accounts} web3={web3}  />
       </div>
     </Layout>
   );

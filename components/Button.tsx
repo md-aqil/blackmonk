@@ -6,11 +6,12 @@ import React from "react";
 interface ButtonProps {
   text: string;
   icon?: string;
+  onClick?:()=>void
 }
 
-const Button: React.FC<ButtonProps> = ({ text, icon }) => {
+const Button: React.FC<ButtonProps> = ({ text, icon,onClick }) => {
   return (
-    <button className="flex gap-2 justify-center self-stretch px-9 py-2 my-auto text-sm text-right bg-lime-400 rounded text-neutral-900 max-md:px-5">
+    <button onClick={onClick} className="flex gap-2 justify-center self-stretch px-9 py-2 my-auto text-sm text-right bg-lime-400 rounded text-neutral-900 max-md:px-5">
       <span className="my-auto">{text}</span>
       {icon && (
         <img

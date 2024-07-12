@@ -1,10 +1,10 @@
 
 import React from "react";
-import Layout from "../components/Layout";
-import Hero from "../components/Hero";
-import Features from "../components/Features";
-import InfoSection from "../components/InfoSection";
-import PrivateSale from "../components/PrivateSale";
+import Layout from "../Layout";
+import Hero from "../Hero";
+import Features from "../Features";
+import InfoSection from "../InfoSection";
+import PrivateSale from "../PrivateSale";
 
 const HomePage: React.FC = () => {
   return (
